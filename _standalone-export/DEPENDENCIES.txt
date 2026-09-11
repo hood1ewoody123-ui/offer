@@ -1,0 +1,76 @@
+================================================================================
+DEPENDENCIES.txt — standalone client cases page
+================================================================================
+Exact versions resolved from the source project's package-lock.json at export
+time. Prefer these pins in the new independent project.
+
+NO Three.js / React Three Fiber / Drei — the scene is CSS 3D (perspective +
+rotateY), not WebGL.
+
+NO GSAP / Lenis / ScrollTrigger.
+
+================================================================================
+FRAMEWORK (runtime)
+================================================================================
+
+PACKAGE              VERSION     WHY
+-------------------- ----------- ----------------------------------------------
+next                 16.2.9      App Router host for the page
+react                19.2.4      UI
+react-dom            19.2.4      DOM renderer
+
+================================================================================
+RUNTIME DEPENDENCIES (page-specific)
+================================================================================
+
+PACKAGE              VERSION     WHY
+-------------------- ----------- ----------------------------------------------
+framer-motion        12.42.0     Fullscreen showreel overlay enter/exit
+                                 (AnimatePresence + motion.div)
+
+================================================================================
+DEV DEPENDENCIES
+================================================================================
+
+PACKAGE                  VERSION     WHY
+------------------------ ----------- ------------------------------------------
+typescript               5.9.3       TypeScript toolchain
+@types/node              ^20         Node types (create-next-app default range)
+@types/react             ^19         React types
+@types/react-dom         ^19         React DOM types
+tailwindcss              4.3.1       Utility classes used in components
+@tailwindcss/postcss     4.3.1       PostCSS plugin for Tailwind v4
+eslint                   9.39.4      Lint
+eslint-config-next       16.2.9      Next ESLint presets
+
+================================================================================
+NOT REQUIRED (present in source monorepo but unused by this page)
+================================================================================
+
+@react-three/fiber
+@react-three/drei
+three
+@types/three
+@playwright/test
+
+================================================================================
+INSTALL COMMANDS (npm — matches source project)
+================================================================================
+
+# After create-next-app (which already installs next/react/react-dom):
+
+npm install framer-motion@12.42.0
+
+# Ensure Tailwind v4 stack matches (create-next-app may already include them;
+# re-pin if versions differ):
+
+npm install -D tailwindcss@4.3.1 @tailwindcss/postcss@4.3.1 typescript@5.9.3 eslint@9.39.4 eslint-config-next@16.2.9
+
+# Optional: replace package.json dependencies block with
+# project-files/config/package.json.suggested and run npm install.
+
+================================================================================
+ENV VARIABLES
+================================================================================
+
+NO ENV VARIABLES REQUIRED.

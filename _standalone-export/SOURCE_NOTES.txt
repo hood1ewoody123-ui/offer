@@ -1,0 +1,117 @@
+================================================================================
+SOURCE_NOTES.txt — architecture of the standalone client cases page
+================================================================================
+
+PURPOSE
+-------
+Independent client presentation of marketing website cases.
+Originally hosted inside another monorepo at temporary route /client-cases.
+In the new project it becomes the only page: `/`.
+
+NOT WebGL. The “3D” room is a CSS 3D carousel (perspective + rotateY prism).
+
+--------------------------------------------------------------------------------
+ROOT COMPONENT
+--------------------------------------------------------------------------------
+StandaloneClientCasesView
+  file: src/standalone/client-cases/client-cases-view.tsx
+
+Owns local React state (no Zustand / Context store):
+  - activeSubCaseId   — highlighted case / front face id
+  - seek { id, gen }  — forces carousel to rotate when list is clicked
+  - openSrc           — fullscreen video URL or null
+
+Composition:
+  [ CollectionWallStrip ]
+  [ intro paragraph ]
+  [ ProjectCaseList accordion ]
+  [ ShowreelFullscreen if open ]
+
+--------------------------------------------------------------------------------
+SCENE (CollectionWallStrip)
+--------------------------------------------------------------------------------
+file: collection-wall-strip.tsx
+
+- Walls arranged as an N-gon (7 faces). Apothem from tan(PI/N).
+- RAF loop: auto-advance ~16s per wall; exponential follow toward target angle.
+- Wheel: horizontal trackpad swipe steps the prism (passive:false only when
+  horizontal dominates vertical).
+- Touch: pointer handlers on the stage; axis lock; horizontal swipe steps;
+  touch-action: pan-y so vertical page scroll still works.
+- Video: desktop plays all muted looping videos (parity with original
+  marketing page). Mobile (max-width 767px) plays only the front face and
+  pauses the rest; inactive use preload=metadata.
+
+Sync out: onFrontChange(id) when the settled front face changes.
+
+--------------------------------------------------------------------------------
+ACCORDION (ProjectCaseList)
+--------------------------------------------------------------------------------
+file: project-case-list.tsx
+
+- Click title: onSelect(id) + toggle open description for that id.
+- «ещё» opens fullscreen showreel for that case.
+- Desktop: «ещё» visible on hover/focus of active row.
+- Mobile: «ещё» always visible when row is active.
+
+Scene → list: activeId prop updates highlight when carousel rotates.
+List → scene: onSelect + seek gen bump → goToIndex in the strip.
+
+--------------------------------------------------------------------------------
+DATA / LOCALIZATION
+--------------------------------------------------------------------------------
+file: data.ts
+
+All user-facing copy is Russian (intro + case descriptions).
+Case titles stay lowercase latin ids used as brand names (tundra, seo, …).
+Video URLs: /marketing/web/<id>.mp4
+Posters:   /marketing/web/<id>.jpg  (derived by replacing .mp4 → .jpg)
+
+--------------------------------------------------------------------------------
+STYLES / RESPONSIVE
+--------------------------------------------------------------------------------
+file: client-cases.css scoped under .standalone-client-cases
+
+Desktop: wall pitch 44vw, perspective 1.8× pitch (matches source collection).
+Tablet ≤1024: smaller pitch, full-width copy column.
+Mobile ≤767: pitch ~88vw, stronger perspective, touch «ещё», larger targets.
+Narrow ≤374: further pitch/padding squeeze.
+Uses min-h-dvh / svh on mobile body.
+
+Tailwind utilities are used lightly in TSX (layout grids, spacing, fixed
+overlay). Tailwind v4 via @import "tailwindcss" in globals.css.
+
+--------------------------------------------------------------------------------
+ANIMATION LIBRARIES
+--------------------------------------------------------------------------------
+- Custom RAF for carousel (no GSAP).
+- framer-motion only for fullscreen overlay fade.
+- prefers-reduced-motion: disables auto-rotate advance.
+
+--------------------------------------------------------------------------------
+GLOBAL ASSUMPTIONS FROM THE MONOREPO (localized for export)
+--------------------------------------------------------------------------------
+OLD ASSUMPTION                          EXPORT HANDLING
+--------------------------------------  ---------------------------------------
+Root layout provides Inter / --font-inter
+                                        export layout.tsx loads Inter + cyrillic
+globals.css imports luzha.css           NOT imported; scoped CSS is enough
+body:has(.luzha-site) white bg          body white + :has(.standalone-…)
+CSS vars --color-* / --z-overlay        tokens-minimal.css
+Route /client-cases                     becomes `/` in new app
+SiteHeader / CTA sidebar                intentionally absent
+
+--------------------------------------------------------------------------------
+BREAKPOINTS (CSS)
+--------------------------------------------------------------------------------
+≤1024px  tablet tweaks
+≤767px   mobile scene + touch UI
+≤374px   narrow phones
+
+--------------------------------------------------------------------------------
+HIDDEN DEPENDENCIES CHECKED
+--------------------------------------------------------------------------------
+No imports from @/components/home, @/components/project (main), @/data/projects,
+@/lib/*, Three/R3F, or luzha chrome components.
+Only npm runtime extra: framer-motion.
+Public assets: only /marketing/web/* listed in data.ts.

@@ -1,0 +1,264 @@
+/**
+ * Scoped styles for /client-cases standalone page only.
+ * Do not import into the main site layout.
+ */
+
+.standalone-client-cases {
+  --luzha-bg: #ffffff;
+  --luzha-accent: #7c7c7c;
+  --luzha-inactive: #d8d8d8;
+  --color-background: var(--luzha-bg);
+  --color-foreground: var(--luzha-accent);
+  --color-muted: var(--luzha-inactive);
+
+  --scc-page-padding: clamp(16px, 1.39vw, 20px);
+  --scc-wall-pitch: 44vw;
+  --scc-wall-gap: clamp(4px, 0.5vw, 8px);
+  --scc-wall-width: calc(var(--scc-wall-pitch) - var(--scc-wall-gap));
+  --scc-wall-height: calc(var(--scc-wall-width) * 446 / 785);
+  --scc-wall-apothem: calc(var(--scc-wall-pitch) * 0.68819);
+  --scc-wall-perspective: calc(var(--scc-wall-pitch) * 1.8);
+  --scc-collection-room-mt: clamp(1.25rem, 3vw, 2.5rem);
+  --scc-collection-copy-mt: 6vw;
+  --scc-case-title-size: clamp(1.125rem, 1.8vw, 1.75rem);
+
+  position: relative;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: clip;
+  background-color: var(--color-background);
+  color: var(--color-muted);
+}
+
+.scc-root {
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+.scc-body {
+  padding-top: var(--scc-collection-room-mt);
+  padding-bottom: 6rem;
+}
+
+/* Same scale as accordion body copy */
+.scc-intro {
+  max-width: 42rem;
+  font-size: clamp(0.75rem, 1.05vw, 0.875rem);
+  font-weight: 400;
+  line-height: 1.45;
+  color: var(--color-muted);
+}
+
+.scc-wall-strip-section {
+  position: relative;
+  width: 100%;
+}
+
+.scc-wall-stage {
+  position: relative;
+  width: 100%;
+  height: var(--scc-wall-height);
+  perspective: var(--scc-wall-perspective);
+  perspective-origin: 50% 50%;
+  overflow-x: clip;
+  overflow-y: visible;
+  touch-action: pan-y;
+}
+
+.scc-wall-room {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transform: translateZ(var(--scc-wall-apothem)) rotateY(0deg);
+  will-change: transform;
+}
+
+.scc-wall {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--scc-wall-width);
+  height: var(--scc-wall-height);
+  margin-top: calc(var(--scc-wall-height) / -2);
+  margin-left: calc(var(--scc-wall-width) / -2);
+  overflow: hidden;
+  pointer-events: none;
+  backface-visibility: hidden;
+}
+
+.scc-wall-media {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.scc-wall-media[data-fit="fill"] {
+  object-fit: fill;
+}
+
+.scc-wall-media-live {
+  position: absolute;
+  inset: 0;
+}
+
+.scc-collection-copy {
+  position: relative;
+  z-index: 1;
+  width: min(
+    calc(100% - 2 * var(--scc-page-padding)),
+    var(--scc-wall-width)
+  );
+  margin-inline: auto;
+  margin-top: var(--scc-collection-copy-mt);
+}
+
+.scc-case-list {
+  font-size: var(--scc-case-title-size);
+}
+
+.scc-case-more {
+  color: var(--color-foreground);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.scc-case-row.is-active:hover .scc-case-more,
+.scc-case-row.is-active:focus-within .scc-case-more {
+  opacity: 1;
+}
+
+.scc-case-desc {
+  display: grid;
+  grid-template-rows: 0fr;
+  margin-left: calc(18px + 28px);
+  margin-right: 0;
+  transition: grid-template-rows 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.scc-case-desc.is-open {
+  grid-template-rows: 1fr;
+}
+
+.scc-case-desc__inner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.scc-case-desc__text {
+  margin: 0.65rem 0 0.35rem;
+  max-width: 42rem;
+  font-size: clamp(0.75rem, 1.05vw, 0.875rem);
+  font-weight: 400;
+  line-height: 1.45;
+  color: var(--color-muted);
+}
+
+.scc-fullscreen-exit {
+  border: 0;
+  background: transparent;
+  color: #fff;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
+  cursor: pointer;
+}
+
+/* —— Tablet —— */
+@media (max-width: 1024px) {
+  .standalone-client-cases {
+    --scc-wall-pitch: min(62vw, 520px);
+    --scc-wall-perspective: calc(var(--scc-wall-pitch) * 2.1);
+    --scc-collection-copy-mt: clamp(2rem, 5vw, 3.5rem);
+  }
+
+  .scc-collection-copy {
+    width: calc(100% - 2 * var(--scc-page-padding));
+  }
+}
+
+/* —— Mobile / small tablet —— */
+@media (max-width: 767px) {
+  .standalone-client-cases {
+    --scc-page-padding: 16px;
+    /* Front face dominates; neighbors peek for carousel affordance */
+    --scc-wall-pitch: min(88vw, 400px);
+    --scc-wall-gap: 6px;
+    --scc-wall-perspective: calc(var(--scc-wall-pitch) * 2.6);
+    --scc-collection-room-mt: max(0.75rem, env(safe-area-inset-top, 0px));
+    --scc-collection-copy-mt: 1.75rem;
+    --scc-case-title-size: clamp(1.05rem, 4.6vw, 1.35rem);
+  }
+
+  .scc-body {
+    padding-bottom: 4.5rem;
+    min-height: 100dvh;
+    min-height: 100svh;
+  }
+
+  .scc-wall-stage {
+    /* Soft vertical room so chrome resize doesn't clip hard */
+    min-height: min(var(--scc-wall-height), 42dvh);
+  }
+
+  .scc-intro {
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    max-width: none;
+  }
+
+  .scc-case-list {
+    gap: 0.35rem;
+  }
+
+  .scc-case-row {
+    gap-x: 16px;
+    grid-template-columns: 18px 1fr auto;
+  }
+
+  .scc-case-row > button.col-span-2 {
+    gap-x: 16px;
+    grid-template-columns: 18px 1fr;
+  }
+
+  /* Touch equivalent of desktop hover “ещё” */
+  .scc-case-row.is-active .scc-case-more {
+    opacity: 1;
+  }
+
+  .scc-case-desc {
+    margin-left: calc(18px + 16px);
+  }
+
+  .scc-case-desc__text {
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    max-width: none;
+  }
+
+}
+
+/* —— Narrow phones —— */
+@media (max-width: 374px) {
+  .standalone-client-cases {
+    --scc-wall-pitch: min(92vw, 320px);
+    --scc-page-padding: 12px;
+    --scc-case-title-size: 1rem;
+  }
+
+  .scc-intro {
+    font-size: 0.75rem;
+  }
+
+  .scc-case-desc__text {
+    font-size: 0.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scc-case-desc {
+    transition: none;
+  }
+}

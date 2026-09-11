@@ -1,0 +1,29 @@
+/**
+ * EXPORT-SPECIFIC COPY
+ *
+ * Minimal subset of the source project's tokens.css.
+ * Only variables referenced by the standalone client-cases page
+ * (directly or via Tailwind theme wiring / fullscreen overlay).
+ */
+
+:root {
+  --color-black: #000000;
+  --color-white: #ffffff;
+  --color-gray-100: #111111;
+  --color-gray-200: #222222;
+  --color-gray-400: #888888;
+
+  --color-background: var(--color-black);
+  --color-foreground: var(--color-white);
+  --color-muted: var(--color-gray-400);
+  --color-border: var(--color-gray-200);
+  --color-surface: var(--color-gray-100);
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", monospace;
+
+  --text-base: 1rem;
+  --leading-normal: 1.5;
+
+  --z-overlay: 20;
+}

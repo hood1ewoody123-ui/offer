@@ -1,0 +1,123 @@
+================================================================================
+CLEANUP_MANIFEST.txt — for later deletion FROM THE MONOREPO
+================================================================================
+Use this AFTER the independent project is running and verified on Vercel.
+Do NOT auto-delete anything marked REVIEW REQUIRED or DO NOT DELETE.
+
+History note:
+  The standalone page was added as untracked files (never a dedicated commit
+  in git history at export time). Inventory is based on filesystem + imports +
+  usage references, not guesswork.
+
+================================================================================
+FILES CREATED EXCLUSIVELY FOR STANDALONE
+================================================================================
+Safe to delete entirely from the monorepo after successful migration:
+
+  src/app/client-cases/page.tsx
+  src/app/client-cases/layout.tsx
+  src/app/client-cases/client-cases-route.css
+
+  src/standalone/client-cases/client-cases-view.tsx
+  src/standalone/client-cases/collection-wall-strip.tsx
+  src/standalone/client-cases/project-case-list.tsx
+  src/standalone/client-cases/showreel-fullscreen.tsx
+  src/standalone/client-cases/data.ts
+  src/standalone/client-cases/client-cases.css
+
+  _standalone-export/   (this entire export folder — optional cleanup)
+
+================================================================================
+DIRECTORIES CREATED EXCLUSIVELY FOR STANDALONE
+================================================================================
+Safe to remove if empty after file deletion:
+
+  src/app/client-cases/
+  src/standalone/client-cases/
+  src/standalone/          (only if no other children remain)
+  _standalone-export/
+
+================================================================================
+EXISTING FILES MODIFIED FOR STANDALONE
+================================================================================
+NONE found.
+
+No shared monorepo files (globals.css, luzha.css, package.json, next.config,
+navigation, marketing-and-communication.ts, CollectionProjectView, etc.) were
+edited to support the standalone page.
+
+The standalone implementation was fully isolated under src/app/client-cases
+and src/standalone/client-cases, with its own CSS and data.
+
+================================================================================
+PACKAGE DEPENDENCIES ADDED ONLY FOR STANDALONE
+================================================================================
+NONE.
+
+framer-motion was already a dependency of the monorepo before this page.
+next / react / react-dom / tailwind were already present.
+Do NOT uninstall them during cleanup.
+
+================================================================================
+PUBLIC ASSETS ADDED ONLY FOR STANDALONE
+================================================================================
+NONE that are exclusive.
+
+The page reuses existing monorepo assets:
+
+  public/marketing/web/*.mp4
+  public/marketing/web/*.jpg
+
+These are ALSO used by the main-site project page
+  /project/marketing-and-communication
+  (src/data/projects/marketing-and-communication.ts).
+
+  >>> DO NOT DELETE public/marketing/web/** during standalone cleanup. <<<
+
+Orbit images under public/marketing/orbit/** were never exclusive to
+standalone (main collection page uses them). Standalone no longer references
+them. DO NOT DELETE as part of this cleanup.
+
+================================================================================
+CONFIG CHANGES ADDED ONLY FOR STANDALONE
+================================================================================
+NONE.
+
+next.config.ts, tsconfig.json, postcss.config.mjs, eslint.config.mjs,
+package.json were not changed for this page.
+
+================================================================================
+ROUTES ADDED FOR STANDALONE
+================================================================================
+  /client-cases   → src/app/client-cases/page.tsx
+
+Safe to remove this App Router segment after migration.
+
+Does NOT affect:
+  /project/marketing-and-communication
+  /project/[slug]
+  or any other routes.
+
+================================================================================
+DO NOT DELETE
+================================================================================
+  public/marketing/web/**                 — shared with main marketing page
+  public/marketing/orbit/**               — main marketing page
+  src/data/projects/marketing-and-communication.ts
+  src/components/project/collection-project-view.tsx
+  src/components/project/collection-wall-strip.tsx
+  src/components/project/project-case-list.tsx
+  src/components/project/asset-orbit.tsx
+  src/components/project/showreel-fullscreen.tsx
+  src/styles/luzha.css
+  src/app/globals.css
+  package.json / lockfile entries for framer-motion, three, etc.
+  Any services-map / parallel development files unrelated to this task
+
+================================================================================
+REVIEW REQUIRED — DO NOT AUTO DELETE
+================================================================================
+  (none identified)
+
+If a future change wired standalone into sitemap, nav, or shared helpers,
+re-audit before cleanup.

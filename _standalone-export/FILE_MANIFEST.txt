@@ -1,0 +1,195 @@
+================================================================================
+FILE_MANIFEST.txt — contents of _standalone-export/
+================================================================================
+
+Legend:
+  SOURCE  = path inside the original monorepo (or EXPORT-SPECIFIC if newly written)
+  EXPORT  = path inside this export bundle
+  TYPE    = component | style | data | asset | config | doc | app
+  REASON  = why the independent project needs it
+
+--------------------------------------------------------------------------------
+DOCUMENTATION (bundle root)
+--------------------------------------------------------------------------------
+
+SOURCE:  EXPORT-SPECIFIC
+EXPORT:  _standalone-export/MIGRATION_README.txt
+TYPE:    doc
+REASON:  Step-by-step bootstrap for a new empty workspace.
+
+SOURCE:  EXPORT-SPECIFIC
+EXPORT:  _standalone-export/FILE_MANIFEST.txt
+TYPE:    doc
+REASON:  This inventory.
+
+SOURCE:  EXPORT-SPECIFIC
+EXPORT:  _standalone-export/DEPENDENCIES.txt
+TYPE:    doc
+REASON:  npm packages + pinned versions + install commands.
+
+SOURCE:  EXPORT-SPECIFIC
+EXPORT:  _standalone-export/CLEANUP_MANIFEST.txt
+TYPE:    doc
+REASON:  Safe later deletion list for the monorepo (after successful migrate).
+
+SOURCE:  EXPORT-SPECIFIC
+EXPORT:  _standalone-export/SOURCE_NOTES.txt
+TYPE:    doc
+REASON:  Architecture notes for the new Cursor/developer.
+
+--------------------------------------------------------------------------------
+APP ENTRY (EXPORT-SPECIFIC — become root `/` in the new project)
+--------------------------------------------------------------------------------
+
+SOURCE:  EXPORT-SPECIFIC (derived from src/app/client-cases/page.tsx)
+EXPORT:  project-files/src/app/page.tsx
+TYPE:    app
+REASON:  Root page mounts StandaloneClientCasesView. Old temporary route
+         /client-cases is NOT preserved in the new app.
+
+SOURCE:  EXPORT-SPECIFIC (derived from src/app/layout.tsx +
+         src/app/client-cases/layout.tsx metadata)
+EXPORT:  project-files/src/app/layout.tsx
+TYPE:    app
+REASON:  Root layout: Inter font (--font-inter), Russian lang/metadata,
+         no SiteHeader / nav.
+
+SOURCE:  EXPORT-SPECIFIC (minimal subset of src/app/globals.css +
+         src/app/client-cases/client-cases-route.css)
+EXPORT:  project-files/src/app/globals.css
+TYPE:    style
+REASON:  Tailwind import, minimal tokens, scoped page CSS, white body.
+
+SOURCE:  EXPORT-SPECIFIC (minimal subset of src/styles/tokens.css)
+EXPORT:  project-files/src/styles/tokens-minimal.css
+TYPE:    style
+REASON:  Only CSS variables used by this page (--z-overlay, color tokens,
+         font/base text). Does NOT include luzha.css or main-site tokens.
+
+--------------------------------------------------------------------------------
+STANDALONE IMPLEMENTATION (copied as-is from monorepo)
+--------------------------------------------------------------------------------
+
+SOURCE:  src/standalone/client-cases/client-cases-view.tsx
+EXPORT:  project-files/src/standalone/client-cases/client-cases-view.tsx
+TYPE:    component
+REASON:  Root view: active case state, seek, fullscreen, composition.
+
+SOURCE:  src/standalone/client-cases/collection-wall-strip.tsx
+EXPORT:  project-files/src/standalone/client-cases/collection-wall-strip.tsx
+TYPE:    component
+REASON:  CSS 3D prism carousel, auto-rotate, wheel, touch swipe, video play
+         budget on mobile.
+
+SOURCE:  src/standalone/client-cases/project-case-list.tsx
+EXPORT:  project-files/src/standalone/client-cases/project-case-list.tsx
+TYPE:    component
+REASON:  Accordion / case list synced to activeId; Russian «ещё».
+
+SOURCE:  src/standalone/client-cases/showreel-fullscreen.tsx
+EXPORT:  project-files/src/standalone/client-cases/showreel-fullscreen.tsx
+TYPE:    component
+REASON:  Fullscreen video overlay (framer-motion); Russian «закрыть».
+
+SOURCE:  src/standalone/client-cases/data.ts
+EXPORT:  project-files/src/standalone/client-cases/data.ts
+TYPE:    data
+REASON:  Localized Russian case copy + video/poster paths.
+
+SOURCE:  src/standalone/client-cases/client-cases.css
+EXPORT:  project-files/src/standalone/client-cases/client-cases.css
+TYPE:    style
+REASON:  Scoped desktop + mobile layout for the page (.standalone-client-cases).
+
+--------------------------------------------------------------------------------
+PUBLIC ASSETS (must keep URL paths identical)
+--------------------------------------------------------------------------------
+
+SOURCE:  public/marketing/web/tundra.mp4
+EXPORT:  project-files/public/marketing/web/tundra.mp4
+TYPE:    asset
+REASON:  Case video. URL: /marketing/web/tundra.mp4 (~2.4M)
+
+SOURCE:  public/marketing/web/tundra.jpg
+EXPORT:  project-files/public/marketing/web/tundra.jpg
+TYPE:    asset
+REASON:  Poster. URL: /marketing/web/tundra.jpg
+
+SOURCE:  public/marketing/web/immortel.mp4 + .jpg
+EXPORT:  project-files/public/marketing/web/immortel.mp4 + .jpg
+TYPE:    asset
+REASON:  Case video + poster (~1.0M video)
+
+SOURCE:  public/marketing/web/formula.mp4 + .jpg
+EXPORT:  project-files/public/marketing/web/formula.mp4 + .jpg
+TYPE:    asset
+REASON:  Case video + poster (~3.7M video)
+
+SOURCE:  public/marketing/web/cleaning.mp4 + .jpg
+EXPORT:  project-files/public/marketing/web/cleaning.mp4 + .jpg
+TYPE:    asset
+REASON:  Case video + poster (~4.8M video)
+
+SOURCE:  public/marketing/web/seo.mp4 + .jpg
+EXPORT:  project-files/public/marketing/web/seo.mp4 + .jpg
+TYPE:    asset
+REASON:  Case video + poster (~5.0M video) — largest file in bundle
+
+SOURCE:  public/marketing/web/vivoz.mp4 + .jpg
+EXPORT:  project-files/public/marketing/web/vivoz.mp4 + .jpg
+TYPE:    asset
+REASON:  Case video + poster (~4.3M video)
+
+SOURCE:  public/marketing/web/school.mp4 + .jpg
+EXPORT:  project-files/public/marketing/web/school.mp4 + .jpg
+TYPE:    asset
+REASON:  Case video + poster (~3.3M video)
+
+TOTAL: 7 mp4 + 7 jpg under public/marketing/web (~25M combined).
+
+NOTE: Orbit / communication-asset images are NOT included — removed from the
+standalone page before export and unused by current data.ts.
+
+--------------------------------------------------------------------------------
+CONFIG TEMPLATES (copy into new project root as needed)
+--------------------------------------------------------------------------------
+
+SOURCE:  next.config.ts
+EXPORT:  project-files/config/next.config.ts
+TYPE:    config
+REASON:  Empty NextConfig — matches source (no special webpack/image rules).
+
+SOURCE:  tsconfig.json
+EXPORT:  project-files/config/tsconfig.json
+TYPE:    config
+REASON:  Paths alias "@/*" -> "./src/*" required by imports.
+
+SOURCE:  postcss.config.mjs
+EXPORT:  project-files/config/postcss.config.mjs
+TYPE:    config
+REASON:  Tailwind v4 PostCSS plugin.
+
+SOURCE:  eslint.config.mjs
+EXPORT:  project-files/config/eslint.config.mjs
+TYPE:    config
+REASON:  Next core-web-vitals + typescript presets.
+
+SOURCE:  .gitignore
+EXPORT:  project-files/config/.gitignore
+TYPE:    config
+REASON:  Standard Next ignores (node_modules, .next, .env*, etc.).
+
+SOURCE:  EXPORT-SPECIFIC
+EXPORT:  project-files/config/package.json.suggested
+TYPE:    config
+REASON:  Optional pinned package.json for the new app after scaffold.
+
+================================================================================
+FILES INTENTIONALLY NOT EXPORTED
+================================================================================
+
+- src/app/client-cases/* (old temporary route shell) — replaced by root app files
+- src/styles/luzha.css — main site chrome; not used by standalone scoped CSS
+- Three.js / canvas / field / services — unrelated
+- public/marketing/orbit/* — unused after orbit block removal
+- node_modules, .next, build caches

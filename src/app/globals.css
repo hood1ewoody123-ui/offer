@@ -1,0 +1,50 @@
+/**
+ * EXPORT-SPECIFIC COPY
+ *
+ * Minimal global stylesheet for the independent client-cases app.
+ * Does NOT import the main site's luzha.css.
+ * Pulls only the CSS variables this page actually uses, plus Tailwind,
+ * and the scoped standalone page styles.
+ */
+
+@import "tailwindcss";
+@import "../styles/tokens-minimal.css";
+@import "../standalone/client-cases/client-cases.css";
+
+@theme inline {
+  --color-background: var(--color-background);
+  --color-foreground: var(--color-foreground);
+  --color-muted: var(--color-muted);
+  --color-border: var(--color-border);
+  --color-surface: var(--color-surface);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+body {
+  background-color: #ffffff;
+  color: var(--color-foreground);
+  font-family: var(--font-inter), var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body:has(.standalone-client-cases) {
+  background-color: #ffffff;
+}
