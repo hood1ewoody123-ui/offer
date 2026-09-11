@@ -24,7 +24,9 @@ export function StandaloneShowreelFullscreen({
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
-    video.muted = false;
+    video.defaultMuted = true;
+    video.muted = true;
+    video.volume = 0;
     void video.play();
   }, [src]);
 
@@ -55,6 +57,7 @@ export function StandaloneShowreelFullscreen({
           ref={videoRef}
           src={src}
           className="h-full w-full object-contain"
+          muted
           playsInline
           controls={false}
           loop={loop}

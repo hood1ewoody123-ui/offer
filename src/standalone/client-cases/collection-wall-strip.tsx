@@ -67,7 +67,9 @@ function WallVideo({
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
+    video.defaultMuted = true;
     video.muted = true;
+    video.volume = 0;
     if (shouldPlay) {
       void video.play().catch(() => undefined);
     } else {

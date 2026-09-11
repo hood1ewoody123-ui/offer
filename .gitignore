@@ -45,3 +45,6 @@ next-env.d.ts
 
 # scaffold temp
 /temp-app
+
+# source reference videos (kept locally; production copies live in public/references/)
+/рефы/*.mp4

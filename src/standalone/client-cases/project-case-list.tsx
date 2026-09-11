@@ -8,6 +8,7 @@ type ProjectCaseListProps = {
   activeId: string;
   onSelect: (id: string) => void;
   onShowMore?: (id: string) => void;
+  lowercaseTitles?: boolean;
 };
 
 export function StandaloneProjectCaseList({
@@ -15,6 +16,7 @@ export function StandaloneProjectCaseList({
   activeId,
   onSelect,
   onShowMore,
+  lowercaseTitles = true,
 }: ProjectCaseListProps) {
   const [openId, setOpenId] = useState<string | null>(null);
 
@@ -42,7 +44,9 @@ export function StandaloneProjectCaseList({
                   );
                 }}
                 aria-expanded={hasDescription ? isOpen : undefined}
-                className="col-span-2 grid min-h-11 grid-cols-[18px_1fr] items-center gap-x-[28px] border-0 bg-transparent p-0 text-left lowercase leading-none"
+                className={`col-span-2 grid min-h-11 grid-cols-[18px_1fr] items-center gap-x-[28px] border-0 bg-transparent p-0 text-left leading-none${
+                  lowercaseTitles ? " lowercase" : ""
+                }`}
               >
                 <span
                   className="block h-[18px] w-[18px] shrink-0 rounded-full"

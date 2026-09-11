@@ -2,6 +2,11 @@
 
 import { useMemo, useState, type CSSProperties } from "react";
 import { StandaloneCollectionWallStrip } from "./collection-wall-strip";
+import type {
+  StandalonePageConfig,
+  StandaloneSubCase,
+  StandaloneWall,
+} from "./data";
 import {
   standaloneClientCasesConfig,
   standaloneFaceWalls,
@@ -10,29 +15,34 @@ import {
 import { StandaloneProjectCaseList } from "./project-case-list";
 import { StandaloneShowreelFullscreen } from "./showreel-fullscreen";
 
-function videoSrcForCase(id: string): string | null {
-  const wall = standaloneSubCases.find((item) => item.id === id)?.walls[0];
+type StandalonePortfolioViewProps = {
+  config: StandalonePageConfig;
+  subCases: StandaloneSubCase[];
+  faceWalls: StandaloneWall[];
+  lowercaseTitles?: boolean;
+};
+
+function videoSrcForCase(
+  subCases: StandaloneSubCase[],
+  id: string,
+): string | null {
+  const wall = subCases.find((item) => item.id === id)?.walls[0];
   return wall?.type === "video" ? wall.src : null;
 }
 
-/**
- * STANDALONE CLIENT CASES PAGE
- *
- * Independent one-off page.
- * Not part of the primary website flow.
- * Do not propagate page-specific UI/content/responsive decisions
- * back into the main website unless explicitly requested.
- */
-export function StandaloneClientCasesView() {
-  const config = standaloneClientCasesConfig;
-  const subCases = standaloneSubCases;
+export function StandalonePortfolioView({
+  config,
+  subCases,
+  faceWalls,
+  lowercaseTitles = true,
+}: StandalonePortfolioViewProps) {
   const defaultId = config.defaultSubCaseId;
 
   const [activeSubCaseId, setActiveSubCaseId] = useState(defaultId);
   const [seek, setSeek] = useState<{ id: string; gen: number } | null>(null);
   const [openSrc, setOpenSrc] = useState<string | null>(null);
 
-  const walls = useMemo(() => standaloneFaceWalls, []);
+  const walls = useMemo(() => faceWalls, [faceWalls]);
 
   const selectCase = (id: string) => {
     setActiveSubCaseId(id);
@@ -40,7 +50,7 @@ export function StandaloneClientCasesView() {
   };
 
   const openShowMore = (id: string) => {
-    const src = videoSrcForCase(id);
+    const src = videoSrcForCase(subCases, id);
     if (!src) return;
     setActiveSubCaseId(id);
     setSeek((prev) => ({ id, gen: (prev?.gen ?? 0) + 1 }));
@@ -72,6 +82,7 @@ export function StandaloneClientCasesView() {
               activeId={activeSubCaseId}
               onSelect={selectCase}
               onShowMore={openShowMore}
+              lowercaseTitles={lowercaseTitles}
             />
           </div>
         </div>
@@ -85,5 +96,23 @@ export function StandaloneClientCasesView() {
         />
       )}
     </div>
+  );
+}
+
+/**
+ * STANDALONE CLIENT CASES PAGE
+ *
+ * Independent one-off page.
+ * Not part of the primary website flow.
+ * Do not propagate page-specific UI/content/responsive decisions
+ * back into the main website unless explicitly requested.
+ */
+export function StandaloneClientCasesView() {
+  return (
+    <StandalonePortfolioView
+      config={standaloneClientCasesConfig}
+      subCases={standaloneSubCases}
+      faceWalls={standaloneFaceWalls}
+    />
   );
 }

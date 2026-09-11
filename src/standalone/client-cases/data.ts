@@ -17,8 +17,15 @@ export type StandaloneWall = {
 export type StandaloneSubCase = {
   id: string;
   title: string;
+  label?: string;
   description: string;
   walls: StandaloneWall[];
+};
+
+export type StandalonePageConfig = {
+  wallSize: { width: number; height: number };
+  collectionDescription: string;
+  defaultSubCaseId: string;
 };
 
 const WALL_WIDTH = 785;
