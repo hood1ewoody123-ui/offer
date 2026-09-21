@@ -48,3 +48,6 @@ next-env.d.ts
 
 # source reference videos (kept locally; production copies live in public/references/)
 /рефы/*.mp4
+
+# source dance reference videos (kept locally; production copies live in public/dance-references/)
+/рефы академия брейкинга/*.mp4
